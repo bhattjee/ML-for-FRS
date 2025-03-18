@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from 'react';
+import Form from './components/Form';
+import Recommendations from './components/Recommendations';
+import axios from 'axios';
 
 function App() {
+  const [recommendations, setRecommendations] = useState(null);
+
+  const handleFormSubmit = async (formData) => {
+    try {
+      const response = await axios.post('http://localhost:5000/recommend', formData);
+      setRecommendations(response.data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Fitness Recommendation System</h1>
+      <Form onSubmit={handleFormSubmit} />
+      {recommendations && <Recommendations recommendations={recommendations} />}
     </div>
   );
 }

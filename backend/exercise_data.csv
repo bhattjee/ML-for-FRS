@@ -1,0 +1,21 @@
+name,type,duration,equipmentAvailability,fitnessGoals,experienceLevel,age,weight,height,medicalConditions,gender,availableDays,exerciseId
+Squats,Strength,30,gym,weightLoss,beginner,25,70,175,,male,22,1
+Push-Ups,Strength,45,home,muscleGain,intermediate,30,80,180,,male,25,2
+Plank,Core,60,none,endurance,advanced,35,75,170,,female,27,3
+Jumping Jacks,Cardio,30,none,generalFitness,beginner,22,65,165,,female,21,4
+Lunges,Strength,45,gym,weightLoss,intermediate,28,72,178,,male,26,5
+Bicep Curls,Strength,30,gym,muscleGain,beginner,24,70,175,,male,23,6
+Burpees,Cardio,60,home,endurance,advanced,33,78,180,,male,28,7
+Deadlifts,Strength,45,gym,weightLoss,intermediate,29,75,180,,male,24,8
+Running,Cardio,30,none,generalFitness,beginner,23,68,170,,female,22,9
+Cycling,Cardio,45,home,endurance,intermediate,31,73,175,,male,27,10
+Yoga,Flexibility,60,none,generalFitness,beginner,27,67,168,,female,20,11
+Swimming,Cardio,60,gym,endurance,advanced,34,76,182,,male,28,12
+Rowing,Cardio,45,gym,endurance,intermediate,32,74,178,,male,25,13
+Sit-Ups,Core,30,home,weightLoss,beginner,26,71,173,,male,21,14
+Pull-Ups,Strength,45,gym,muscleGain,intermediate,28,72,178,,male,23,15
+High Knees,Cardio,30,none,endurance,beginner,24,69,170,,female,26,16
+Box Jumps,Cardio,45,gym,endurance,advanced,30,77,180,,male,28,17
+Russian Twists,Core,30,home,weightLoss,beginner,25,70,175,,female,20,18
+Kettlebell Swings,Strength,45,gym,muscleGain,intermediate,29,75,180,,male,24,19
+Pilates,Flexibility,60,none,generalFitness,beginner,27,67,168,,female,22,20
