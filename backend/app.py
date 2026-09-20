@@ -12,9 +12,11 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the pre-trained model, encoder, and scaler
-model = joblib.load(r'C:\Users\jbhat\OneDrive\Desktop\PROJECT\Demos\Fitness_AI\fitness-recommendation\backend\model.pkl')
-encoder = joblib.load(r'C:\Users\jbhat\OneDrive\Desktop\PROJECT\Demos\Fitness_AI\fitness-recommendation\backend\encoder.pkl')
-scaler = joblib.load(r'C:\Users\jbhat\OneDrive\Desktop\PROJECT\Demos\Fitness_AI\fitness-recommendation\backend\scaler.pkl')
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+model = joblib.load(os.path.join(script_dir, 'model.pkl'))
+encoder = joblib.load(os.path.join(script_dir, 'encoder.pkl'))
+scaler = joblib.load(os.path.join(script_dir, 'scaler.pkl'))
 
 @app.route('/recommend', methods=['POST'])
 def recommend():

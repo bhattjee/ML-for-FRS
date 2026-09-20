@@ -1,70 +1,208 @@
-# Getting Started with Create React App
+# ML-for-FRS (Machine Learning Model for Fitness Recommendation System)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An intelligent machine learning-powered system that delivers personalized fitness recommendations. The system leverages advanced neural networks to analyze comprehensive user profiles (age, weight, fitness goals, experience level, medical conditions, equipment availability) and predict optimal exercise recommendations tailored to individual needs.
 
-## Available Scripts
+## Machine Learning Architecture
 
-In the project directory, you can run:
+### Core ML Components
+- **MLPClassifier (Multi-Layer Perceptron)** - Neural network-based classifier with 100 hidden neurons for predicting optimal exercise recommendations
+- **OneHotEncoder** - Handles categorical feature encoding for fitness goals, experience levels, equipment types, gender, and medical conditions
+- **StandardScaler** - Normalizes numerical features (age, weight, height, duration, exercise ID, available days) for optimal model performance
+- **Train-Test Split** - 80/20 split with random_state=42 for reproducible results
 
-### `npm start`
+### Model Training Pipeline
+1. **Data Preprocessing**: Categorical features encoded using OneHotEncoder, numerical features scaled using StandardScaler
+2. **Feature Engineering**: Combines encoded categorical features with scaled numerical features into a unified feature matrix
+3. **Neural Network Training**: MLPClassifier with optimized hyperparameters:
+   - Hidden layer architecture: (100,)
+   - Maximum iterations: 1000
+   - Learning rate: 0.01
+   - Early stopping enabled to prevent overfitting
+   - Validation fraction: 10% of training data
+   - Patience: 10 iterations without improvement
+4. **Model Persistence**: Trained model, encoder, and scaler serialized using joblib for production deployment
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prediction Workflow
+1. User submits fitness profile through web interface
+2. Input data preprocessed using saved encoder and scaler
+3. Model predicts exercise IDs based on learned patterns
+4. Recommendations returned via REST API with real-time response
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+### Machine Learning & Data Science
+- **scikit-learn 1.3.2** - Core ML library for model training and preprocessing
+- **pandas 2.1.4** - Data manipulation and analysis
+- **numpy 1.26.2** - Numerical computing and array operations
+- **joblib 1.3.2** - Model serialization and persistence
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend API
+- **Flask 3.0.0** - Lightweight Python web framework for REST API
+- **Flask-CORS 4.0.0** - Cross-origin resource sharing for frontend-backend communication
 
-### `npm run build`
+### Frontend Interface
+- **React 19** - Modern UI framework for responsive user interface
+- **Axios 1.8.3** - HTTP client for API communication
+- **Chart.js 4.4.8 & react-chartjs-2 5.3.0** - Interactive data visualization
+- **jsPDF 3.0.0 & PDFKit 0.16.0** - PDF report generation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Project Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+fitness-recommendation/
+├── backend/
+│   ├── app.py              # Flask API server
+│   ├── models.py           # ML model training script
+│   ├── model.pkl           # Trained model (gitignored)
+│   ├── encoder.pkl         # Feature encoder (gitignored)
+│   ├── scaler.pkl          # Feature scaler (gitignored)
+│   └── exercise_data.csv   # Training dataset
+├── src/
+│   ├── components/
+│   │   ├── Form.js         # User input form
+│   │   └── Recommendations.js # Results display
+│   ├── App.js              # Main application component
+│   └── index.js            # React entry point
+├── public/                 # Static assets
+├── package.json           # Frontend dependencies
+└── requirements.txt        # Backend dependencies
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Prerequisites
 
-### `npm run eject`
+- **Node.js** (v18 or higher)
+- **Python** (v3.8 or higher)
+- **pip** (Python package manager)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. Clone the repository
+```bash
+git clone <repository-url>
+cd fitness-recommendation
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2. Install Frontend Dependencies
+```bash
+npm install
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 3. Install Backend Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-## Learn More
+### 4. Train the ML Model (First time only)
+```bash
+cd backend
+python models.py
+```
+This will generate `model.pkl`, `encoder.pkl`, and `scaler.pkl` files.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Running the Application
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Start the Backend Server
+```bash
+cd backend
+python app.py
+```
+The backend will run on `http://localhost:5000`
 
-### Code Splitting
+### Start the Frontend Development Server
+In a new terminal:
+```bash
+npm start
+```
+The frontend will run on `http://localhost:3000`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## API Endpoints
 
-### Analyzing the Bundle Size
+### POST /recommend
+Accepts user fitness data and returns exercise recommendations.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Request Body:**
+```json
+{
+  "name": "John Doe",
+  "age": 30,
+  "gender": "male",
+  "weight": 75,
+  "height": 175,
+  "fitnessGoals": "weightLoss",
+  "experienceLevel": "intermediate",
+  "medicalConditions": "None",
+  "preferredDuration": 45,
+  "availableDays": 25,
+  "equipmentAvailability": "gym",
+  "duration": 30,
+  "exerciseId": 1
+}
+```
 
-### Making a Progressive Web App
+**Response:**
+```json
+{
+  "recommendations": [1, 5, 8, 12]
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Features
 
-### Advanced Configuration
+### Machine Learning Capabilities
+- **Neural Network-Based Predictions**: MLPClassifier model trained on comprehensive fitness dataset
+- **Intelligent Feature Engineering**: Automatic encoding and scaling of mixed data types
+- **Adaptive Learning**: Model continuously improves with additional training data
+- **Real-Time Inference**: Sub-second prediction latency for seamless user experience
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### User Experience
+- **Personalized Recommendations**: AI-powered exercise suggestions tailored to individual profiles
+- **Multi-Factor Analysis**: Considers 12+ features including demographics, goals, experience, equipment, and medical conditions
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Data Visualization**: Interactive charts to display recommendation results
+- **PDF Export**: Generate downloadable fitness reports
 
-### Deployment
+## Machine Learning Model Details
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Dataset
+The system is trained on `exercise_data.csv` containing comprehensive fitness data including user demographics, fitness goals, experience levels, and corresponding exercise recommendations.
 
-### `npm run build` fails to minify
+### Feature Engineering
+**Categorical Features** (One-Hot Encoded):
+- fitnessGoals: weightLoss, muscleGain, endurance, generalFitness
+- experienceLevel: beginner, intermediate, advanced
+- equipmentAvailability: gym, home, none
+- gender: male, female, other
+- medicalConditions: Various medical conditions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Numerical Features** (Standard Scaled):
+- age: User age in years
+- weight: User weight in kg
+- height: User height in cm
+- duration: Workout duration in minutes
+- exerciseId: Exercise identifier
+- availableDays: Number of available days per month (20-28)
+
+### Model Performance
+- **Algorithm**: Multi-Layer Perceptron (Neural Network)
+- **Architecture**: Single hidden layer with 100 neurons
+- **Optimization**: Adam optimizer with learning rate 0.01
+- **Regularization**: Early stopping with 10-iteration patience
+- **Validation**: 10% validation split for early stopping detection
+
+## Security Notes
+
+- Model files (`.pkl`) are excluded from version control via `.gitignore`
+- Hardcoded absolute paths have been removed for portability
+- CORS is enabled for development (restrict in production)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
